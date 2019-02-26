@@ -1,10 +1,11 @@
 #!/bin/sh
 
-
 sed -i 's/dl-cdn.alpinelinux.org/mirrors.ustc.edu.cn/g' /etc/apk/repositories
-apk update && apk add docker ttyd nginx bash
+apk update && apk add docker ttyd nginx python3
+curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
+python get-pip.py
 pip install flask
 mkdir /run/nginx/ && touch /run/nginx/nginx.pid 
 cp default.conf /etc/nginx/conf.d/default.conf
-python app.py
+python3 app.py
 nginx
