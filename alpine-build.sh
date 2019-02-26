@@ -9,5 +9,5 @@ pip install flask
 mkdir /run/nginx/ && touch /run/nginx/nginx.pid 
 cd `dirname $0`
 cp default.conf /etc/nginx/conf.d/default.conf
-nginx
-python3 app.py
+#nginx
+#python3 app.py
