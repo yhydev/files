@@ -2,11 +2,12 @@
 #coding=utf-8
 
 from flask import Flask, jsonify, make_response
-import os, re, time, socket
+import os, re, time, socket, sys
 
 app = Flask(__name__)
 
 SO_BINDTODEVICE=25
+BASE_PATH = os.path.dirname(sys.arg[0])
 
 def getFreePort(iface=None):
     s = socket.socket()
@@ -23,9 +24,10 @@ def getFreePort(iface=None):
 
 @app.route("/linux")
 def createLinux():
+
                 logfilename = "/tmp/share-linux-%s.log" % str(1000 * time.time())
                 port = getFreePort()
-                cmd = "nohup  ttyd -I /index.html -p %d docker run -it ubuntu bash > %s 2>&1 &" % (port, logfilename)
+                cmd = "nohup  ttyd -I %s/index.html -p %d docker run -it ubuntu bash > %s 2>&1 &" % (BASE_PATH, port, logfilename)
                 os.system(cmd)
                 return jsonify({"port": port})
 
