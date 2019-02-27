@@ -16,6 +16,10 @@ BASE_DIRNAME = os.path.dirname(sys.argv[0])
 #日志文件目录
 LOG_DIR = "/tmp/share-linux"
 
+#内存大小
+MEMORY_LIMIT = "25M"
+MEMORY_SWAP_LIMIT = "200M"
+
 #终端文件路径
 INDEX_PATHNAME = os.path.join(BASE_DIRNAME, "terminal.html")
 
@@ -29,11 +33,12 @@ def clean():
     logFileNames = os.listdir(LOG_DIR)
     try:
         for fileName in logFileNames:
-            f = open(os.join(LOG_DIR, fileName))
+            f = open(os.path.join(LOG_DIR, fileName))
             log = f.read()
             if re.search("clients: 0", log) != None:
-                client.containers.get(fileName).remove(force = True)
-                os.remove(os.path.join(LOG_DIR, fileName))
+               output = os.popen("ps -a|grep %s|awk '{if(NR==1)print $1}'|xargs kill -9" % fileName)
+               client.containers.get(fileName).remove(force = True)
+               os.remove(os.path.join(LOG_DIR, fileName))
     except Exception as e:
         logging.exception(e)
 
@@ -71,7 +76,7 @@ def run():
     status = 200
     try:
         port = getFreePort()
-        container = client.containers.run(image, "sleep 2h", detach = True, remove = True)
+        container = client.containers.run(image, "sleep 2h", detach = True, remove = True, mem_limit = MEMORY_LIMIT, memswap_limit = MEMORY_SWAP_LIMIT)
         logFileName = os.path.join(LOG_DIR, container.name)
         cmd = "nohup  ttyd -I %s -p %d docker exec -it %s bash > %s 2>&1 &" % (INDEX_PATHNAME, port, container.name, logFileName)
         os.system(cmd)
