@@ -14,6 +14,9 @@ BASE_DIRNAME = os.path.dirname(sys.argv[0])
 #终端文件路径
 INDEX_PATHNAME = os.path.join(BASE_DIRNAME, "terminal.html")
 
+#容器最多个数
+#MAX_CONTAINER = 8
+
 #docker 接口
 client = docker.from_env()
 
@@ -46,7 +49,7 @@ def run():
             port = getFreePort()
             hostName = "share-linux-%d" % port
             container = client.containers.run(image, "sleep 2h", name = hostName, detach = True, remove = True)
-            cmd = "nohup  ttyd -I %s -p %d docker exec -it %s bash > %s 2>&1 &" % (INDEX_PATHNAME, port, hostName, logfilename)
+            cmd = "nohup  ttyd -d 0 -I %s -p %d docker exec -it %s bash > %s 2>&1 &" % (INDEX_PATHNAME, port, hostName, logfilename)
             os.system(cmd)
             ret = jsonify({"port": port})
         except Exception as e:

@@ -51,14 +51,6 @@
 </div>
 <script type="text/javascript">
 
-function to(url){
-	var form = document.createElement('form');
-	form.action = url;
-	form.target = '_blank';
-	document.body.appendChild(form);
-	form.submit();
-
-}
 
 
 function getLinux() {
@@ -67,7 +59,7 @@ function getLinux() {
 			if(xhr.readyState == 4){
 				if(xhr.status == 200){
 					data = JSON.parse(xhr.responseText)
-					to("./" + data.port)
+					location.href = "./" + data.port
 				}else{
 					alert(xhr.responseText)
 				}
