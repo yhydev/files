@@ -23,6 +23,5 @@ fi
 
 cd `dirname $0`
 cp default.conf /etc/nginx/conf.d/default.conf
-cp index.html /var/lib/nginx/html/index.html
 #nginx
 #python3 app.py
