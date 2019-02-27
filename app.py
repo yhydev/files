@@ -2,7 +2,7 @@
 #coding=utf-8
 
 from flask import Flask, jsonify, url_for, render_template, request
-import os, re, time, socket, sys, docker, logging
+import os, re, time, socket, sys, docker, logging, threading
 
 logging.basicConfig(level = logging.INFO)
 
@@ -29,8 +29,11 @@ def clean():
     logFileNames = os.listdir(LOG_DIR)
     try:
         for fileName in logFileNames:
-            client.containers.get(fileName).remove(force = True)
-            os.remove(os.path.join(LOG_DIR, fileName))
+            f = open(os.join(LOG_DIR, fileName))
+            log = f.read()
+            if re.search("clients: 0", log) != None:
+                client.containers.get(fileName).remove(force = True)
+                os.remove(os.path.join(LOG_DIR, fileName))
     except Exception as e:
         logging.exception(e)
 
@@ -68,7 +71,7 @@ def run():
     status = 200
     try:
         port = getFreePort()
-        container = client.containers.run(image, "sleep 2h", name = hostName, detach = True, remove = True)
+        container = client.containers.run(image, "sleep 2h", detach = True, remove = True)
         logFileName = os.path.join(LOG_DIR, container.name)
         cmd = "nohup  ttyd -I %s -p %d docker exec -it %s bash > %s 2>&1 &" % (INDEX_PATHNAME, port, container.name, logFileName)
         os.system(cmd)
