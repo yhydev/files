@@ -1,7 +1,7 @@
 #!/bin/env python
 #coding=utf-8
 
-from flask import Flask, jsonify, make_response
+from flask import Flask, jsonify
 import os, re, time, socket, sys, docker
 
 app = Flask(__name__)
@@ -30,6 +30,7 @@ def createLinux(tag = "ubuntu"):
         logfilename = "/tmp/share-linux-%s.log" % str(1000 * time.time())
         
         ret = None
+        status = 200
         try:
             port = getFreePort()
             hostName = "share-linux-%d" % port
@@ -39,8 +40,9 @@ def createLinux(tag = "ubuntu"):
             ret = jsonify({"port": port})
         except Exception as e:
             ret = str(e)
+            status = 500
         
-        return ret
+        return ret, status
 
 
 if __name__ == '__main__':
