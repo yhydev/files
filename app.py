@@ -1,16 +1,25 @@
 #!/bin/env python
 #coding=utf-8
 
-from flask import Flask, jsonify
+from flask import Flask, jsonify, url_for, render_template
 import os, re, time, socket, sys, docker
 
 app = Flask(__name__)
 
 SO_BINDTODEVICE=25
+
+#文件路径
 BASE_DIRNAME = os.path.dirname(sys.argv[0])
+
+#终端文件路径
 INDEX_PATHNAME = os.path.join(BASE_DIRNAME, "terminal.html")
 
+#docker 接口
+client = docker.from_env()
+
+
 def getFreePort(iface=None):
+    """获取一个免费端口"""
     s = socket.socket()
 
     if iface:
@@ -22,11 +31,17 @@ def getFreePort(iface=None):
 
     return port
 
-client = docker.from_env()
 
-@app.route("/<tag>")
-def createLinux(tag = "ubuntu"):
+@app.route("/api/v1/run/<tag>")
+def run(tag = "ubuntu"):
+        """
+        Description:
+        运行一个容器
+        
+        Parameter:
+        tag docker tag 名称
 
+        """
         logfilename = "/tmp/share-linux-%s.log" % str(1000 * time.time())
         
         ret = None
@@ -43,6 +58,11 @@ def createLinux(tag = "ubuntu"):
             status = 500
         
         return ret, status
+
+@app.route("/")
+def index():
+    return render_template("index.html")
+
 
 
 if __name__ == '__main__':
