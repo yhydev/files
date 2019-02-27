@@ -6,14 +6,14 @@ apk update && apk add docker ttyd nginx python3 curl
 
 pipFileName=/tmp/get-pip.py
 
-if [! -e $pipFileName];then
+if [ ! -e $pipFileName ];then
 curl https://bootstrap.pypa.io/get-pip.py -o $pipFileName
 python3 $pipFileName
 fi
 
 pip install flask
 
-if [! -e "/run/nginx/nginx.pid"];then
+if [ ! -e "/run/nginx/nginx.pid" ];then
 	mkdir /run/nginx/ && touch /run/nginx/nginx.pid 
 fi
 
