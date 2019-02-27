@@ -13,7 +13,7 @@ fi
 
 pip install flask
 
-if [ ! -e "/run/nginx" ]
+if [ ! -e "/run/nginx" ];then
 	mkdir /run/nginx/
 fi
 
