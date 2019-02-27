@@ -33,9 +33,24 @@
 	<button id="getlinux" onclick="getLinux()">Get Root Linux</button>
 </div>
 <script type="text/javascript">
+
+	var get
+
+
 	var xhr = new XMLHttpRequest();
-	xhr.open("GET", "/free-linux", true);
+	xhr.onreadystatechange = function(){
+		if(xhr.readyState == 4){
+			if(xhr.status == 200){
+				data = JSON.parse(xhr.responseText)
+				window.open("./" + data.port)
+			}else{
+				alert(xhr.responseText)
+			}
+		}
+	};
+	xhr.open("GET", "./free-linux", true);
 	xhr.send();
+
 </script>
 </body>
 </html>
