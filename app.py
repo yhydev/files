@@ -29,14 +29,18 @@ def createLinux(tag = "ubuntu"):
 
         logfilename = "/tmp/share-linux-%s.log" % str(1000 * time.time())
         
-        port = getFreePort()
-        hostName = "share-linux-%d" % port
-
-        client.run(tag, "sleep 2h", name = hostName)
-
-        cmd = "nohup  ttyd -I %s -p %d docker exec -it %s bash > %s 2>&1 &" % (INDEX_PATHNAME, port, hostName, logfilename)
-        os.system(cmd)
-        return jsonify({"port": port})
+        ret = None
+        try:
+            port = getFreePort()
+            hostName = "share-linux-%d" % port
+            container = client.containers.run(tag, "sleep 2h", name = hostName, detach = True, remove = True)
+            cmd = "nohup  ttyd -I %s -p %d docker exec -it %s bash > %s 2>&1 &" % (INDEX_PATHNAME, port, hostName, logfilename)
+            os.system(cmd)
+            ret = jsonify({"port": port})
+        except Exception as e:
+            ret = str(e)
+        
+        return ret
 
 
 if __name__ == '__main__':
