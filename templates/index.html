@@ -51,13 +51,23 @@
 </div>
 <script type="text/javascript">
 
+function to(){
+	var form = document.createElement('form');
+	form.action = url;
+	form.target = '_blank';
+	document.body.appendChild(form);
+	form.submit();
+
+}
+
+
 function getLinux() {
 		var xhr = new XMLHttpRequest();
 		xhr.onreadystatechange = function(){
 			if(xhr.readyState == 4){
 				if(xhr.status == 200){
 					data = JSON.parse(xhr.responseText)
-					window.open("./" + data.port)
+					to("./" + data.port)
 				}else{
 					alert(xhr.responseText)
 				}
