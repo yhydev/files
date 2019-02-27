@@ -8,7 +8,7 @@ app = Flask(__name__)
 
 SO_BINDTODEVICE=25
 BASE_DIRNAME = os.path.dirname(sys.argv[0])
-INDEX_PATHNAME = os.path.join(BASE_DIRNAME, "index.html")
+INDEX_PATHNAME = os.path.join(BASE_DIRNAME, "terminal.html")
 
 def getFreePort(iface=None):
     s = socket.socket()
