@@ -22,7 +22,7 @@ def getFreePort(iface=None):
 
     return port
 
-client = docker.form_env()
+client = docker.from_env()
 
 @app.route("/<tag>")
 def createLinux(tag = "ubuntu"):
