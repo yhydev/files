@@ -2,7 +2,7 @@
 #coding=utf-8
 
 from flask import Flask, jsonify, make_response
-import os, re, time, socket, sys
+import os, re, time, socket, sys, docker
 
 app = Flask(__name__)
 
@@ -22,13 +22,19 @@ def getFreePort(iface=None):
 
     return port
 
+client = docker.form_env()
 
-@app.route("/linux")
-def createLinux():
+@app.route("/<tag>")
+def createLinux(tag = "ubuntu"):
 
         logfilename = "/tmp/share-linux-%s.log" % str(1000 * time.time())
+        
         port = getFreePort()
-        cmd = "nohup  ttyd -I %s -p %d docker run -it ubuntu bash > %s 2>&1 &" % (INDEX_PATHNAME, port, logfilename)
+        hostName = "share-linux-%d" % port
+
+        client.run(tag, "sleep 2h", name = hostName)
+
+        cmd = "nohup  ttyd -I %s -p %d docker exec -it %s bash > %s 2>&1 &" % (INDEX_PATHNAME, port, hostName, logfilename)
         os.system(cmd)
         return jsonify({"port": port})
 
