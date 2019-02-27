@@ -32,7 +32,7 @@ def getFreePort(iface=None):
     return port
 
 
-@app.route("/api/v1/containers"， method = ["POST"])
+@app.route("/api/v1/containers", methods = ["POST"])
 def run():
         """
         Description:
