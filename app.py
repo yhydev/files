@@ -59,25 +59,25 @@ def getFreePort(iface=None):
 
 @app.route("/api/v1/containers", methods = ["POST"])
 def run():
-        """
-        Description:
-        运行一个容器
-        """
-        image = "ubuntu"
-        ret = None
-        status = 200
-        try:
-            port = getFreePort()
-            container = client.containers.run(image, "sleep 2h", name = hostName, detach = True, remove = True)
-            logFileName = os.path.join(LOG_DIR, container.name)
-            cmd = "nohup  ttyd -I %s -p %d docker exec -it %s bash > %s 2>&1 &" % (INDEX_PATHNAME, port, container.name, logFileName)
-            os.system(cmd)
-            ret = jsonify({"port": port})
-        except Exception as e:
-            ret = str(e)
-            status = 500
-        
-        return ret, status
+    """
+    Description:
+    运行一个容器
+    """
+    image = "ubuntu"
+    ret = None
+    status = 200
+    try:
+        port = getFreePort()
+        container = client.containers.run(image, "sleep 2h", name = hostName, detach = True, remove = True)
+        logFileName = os.path.join(LOG_DIR, container.name)
+        cmd = "nohup  ttyd -I %s -p %d docker exec -it %s bash > %s 2>&1 &" % (INDEX_PATHNAME, port, container.name, logFileName)
+        os.system(cmd)
+        ret = jsonify({"port": port})
+    except Exception as e:
+        ret = str(e)
+        status = 500
+    
+    return ret, status
 
 
 
@@ -90,9 +90,9 @@ def index():
 
 
 if __name__ == '__main__':
-        if !os.path.exists(LOG_DIR):
-            os.path.mkdir(LOG_DIR)
+    if !os.path.exists(LOG_DIR):
+        os.path.mkdir(LOG_DIR)
 
-        threading.Thread(cleanThreading).start()
+    threading.Thread(cleanThreading).start()
 
-        app.run(host = "0.0.0.0")
+    app.run(host = "0.0.0.0")
