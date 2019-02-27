@@ -13,8 +13,12 @@ fi
 
 pip install flask
 
+if [ ! -e "/run/nginx" ]
+	mkdir /run/nginx/
+fi
+
 if [ ! -e "/run/nginx/nginx.pid" ];then
-	mkdir /run/nginx/ && touch /run/nginx/nginx.pid 
+	 touch /run/nginx/nginx.pid 
 fi
 
 cd `dirname $0`
