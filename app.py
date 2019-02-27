@@ -90,9 +90,9 @@ def index():
 
 
 if __name__ == '__main__':
-    if !os.path.exists(LOG_DIR):
-        os.path.mkdir(LOG_DIR)
+    if not os.path.exists(LOG_DIR):
+        os.mkdir(LOG_DIR)
 
-    threading.Thread(cleanThreading).start()
+    threading.Thread(target = cleanThreading).start()
 
     app.run(host = "0.0.0.0")
