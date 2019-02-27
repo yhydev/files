@@ -1,7 +1,7 @@
 #!/bin/env python
 #coding=utf-8
 
-from flask import Flask, jsonify, url_for, render_template
+from flask import Flask, jsonify, url_for, render_template, request
 import os, re, time, socket, sys, docker
 
 app = Flask(__name__)
@@ -32,24 +32,20 @@ def getFreePort(iface=None):
     return port
 
 
-@app.route("/api/v1/run/<tag>")
-def run(tag = "ubuntu"):
+@app.route("/api/v1/containers"， method = ["POST"])
+def run():
         """
         Description:
         运行一个容器
-        
-        Parameter:
-        tag docker tag 名称
-
         """
         logfilename = "/tmp/share-linux-%s.log" % str(1000 * time.time())
-        
+        image = "ubuntu"
         ret = None
         status = 200
         try:
             port = getFreePort()
             hostName = "share-linux-%d" % port
-            container = client.containers.run(tag, "sleep 2h", name = hostName, detach = True, remove = True)
+            container = client.containers.run(image, "sleep 2h", name = hostName, detach = True, remove = True)
             cmd = "nohup  ttyd -I %s -p %d docker exec -it %s bash > %s 2>&1 &" % (INDEX_PATHNAME, port, hostName, logfilename)
             os.system(cmd)
             ret = jsonify({"port": port})
