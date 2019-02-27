@@ -51,7 +51,7 @@
 </div>
 <script type="text/javascript">
 
-function getLinux(argument) {
+function getLinux() {
 		var xhr = new XMLHttpRequest();
 		xhr.onreadystatechange = function(){
 			if(xhr.readyState == 4){
@@ -63,8 +63,9 @@ function getLinux(argument) {
 				}
 			}
 		};
-		xhr.open("GET", "./api/v1/run", true);
-		xhr.send();
+		xhr.set
+		xhr.open("POST", "./api/v1/containers", true);
+		xhr.send("image=ubuntu");
 }
 
 </script>
