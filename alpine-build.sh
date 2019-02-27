@@ -11,7 +11,7 @@ curl https://bootstrap.pypa.io/get-pip.py -o $pipFileName
 python3 $pipFileName
 fi
 
-pip install flask
+pip install flask docker
 
 if [ ! -e "/run/nginx" ];then
 	mkdir /run/nginx/
