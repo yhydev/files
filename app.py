@@ -30,19 +30,28 @@ INDEX_PATHNAME = os.path.join(BASE_DIRNAME, "terminal.html")
 client = docker.from_env()
 
 def clean():
+    logging.info("clean()")
     logFileNames = os.listdir(LOG_DIR)
     try:
         for fileName in logFileNames:
+            logging.info("readly clean %s" % fileName)
+
             f = open(os.path.join(LOG_DIR, fileName))
             log = f.read()
             if re.search("clients: 0", log) != None:
+               logging.info("staring clean %s" % fileName)
                output = os.popen("ps -a|grep %s|awk '{if(NR==1)print $1}'|xargs kill -9" % fileName)
                client.containers.get(fileName).remove(force = True)
                os.remove(os.path.join(LOG_DIR, fileName))
+            else:
+               logging.info("%s not exit" % fileName)
+
     except Exception as e:
-        if isinstance(e, docker.errors.NotFound)
+        if isinstance(e, docker.errors.NotFound):
             os.remove(os.path.join(LOG_DIR, fileName))
-        logging.exception(e)
+            logging.warning(e)
+        else:
+            logging.exception(e)
 
 
 def cleanThreading():
