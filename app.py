@@ -34,17 +34,19 @@ def clean():
     logFileNames = os.listdir(LOG_DIR)
     try:
         for fileName in logFileNames:
-            logging.info("readly clean %s" % fileName)
+            logging.info("readly clean [%s]" % fileName)
 
             f = open(os.path.join(LOG_DIR, fileName))
             log = f.read()
-            if re.search("clients: 0", log) != None:
-               logging.info("staring clean %s" % fileName)
+            if re.search("SIGHUP", log) != None:
+               logging.info("staring clean [%s]" % fileName)
                output = os.popen("ps -a|grep %s|awk '{if(NR==1)print $1}'|xargs kill -9" % fileName)
                client.containers.get(fileName).remove(force = True)
-               os.remove(os.path.join(LOG_DIR, fileName))
+               logging.info("[%s] clean success" % fileName)
             else:
-               logging.info("%s not exit" % fileName)
+               logging.info("[%s] not exit, clean log" % fileName)
+            os.remove(os.path.join(LOG_DIR, fileName))
+
 
     except Exception as e:
         if isinstance(e, docker.errors.NotFound):
