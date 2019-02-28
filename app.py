@@ -38,7 +38,7 @@ def clean():
 
             f = open(os.path.join(LOG_DIR, fileName))
             log = f.read()
-            if re.search("SIGHUP", log) != None:
+            if re.search("clients: 0", log) != None:
                logging.info("staring clean [%s]" % fileName)
                output = os.popen("ps -a|grep %s|awk '{if(NR==1)print $1}'|xargs kill -9" % fileName)
                client.containers.get(fileName).remove(force = True)
