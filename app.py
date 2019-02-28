@@ -42,10 +42,11 @@ def clean():
                logging.info("staring clean [%s]" % fileName)
                output = os.popen("ps -a|grep %s|awk '{if(NR==1)print $1}'|xargs kill -9" % fileName)
                client.containers.get(fileName).remove(force = True)
+               os.remove(os.path.join(LOG_DIR, fileName))
                logging.info("[%s] clean success" % fileName)
             else:
-               logging.info("[%s] not exit, clean log" % fileName)
-            os.remove(os.path.join(LOG_DIR, fileName))
+               logging.info("[%s] not exit" % fileName)
+            
 
 
     except Exception as e:
