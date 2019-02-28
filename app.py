@@ -17,7 +17,7 @@ BASE_DIRNAME = os.path.dirname(sys.argv[0])
 LOG_DIR = "/tmp/share-linux"
 
 #内存大小
-MEMORY_LIMIT = "25M"
+MEMORY_LIMIT = "100M"
 MEMORY_SWAP_LIMIT = "200M"
 
 #终端文件路径
