@@ -92,7 +92,7 @@ def run():
         port = getFreePort()
         container = client.containers.run(image, "sleep 2h", detach = True, remove = True, mem_limit = MEMORY_LIMIT, memswap_limit = MEMORY_SWAP_LIMIT)
         logFileName = os.path.join(LOG_DIR, container.name)
-        cmd = "nohup  ttyd -I %s -p %d docker exec -it %s bash > %s &" % (INDEX_PATHNAME, port, container.name, logFileName)
+        cmd = "ttyd -I %s -p %d docker exec -it %s bash>%s 2>&1 &" % (INDEX_PATHNAME, port, container.name, logFileName)
         os.system(cmd)
         ret = jsonify({"port": port})
     except Exception as e:
