@@ -40,14 +40,16 @@ def clean():
                client.containers.get(fileName).remove(force = True)
                os.remove(os.path.join(LOG_DIR, fileName))
     except Exception as e:
+        if isinstance(e, docker.errors.NotFound)
+            os.remove(os.path.join(LOG_DIR, fileName))
         logging.exception(e)
-
 
 
 def cleanThreading():
      while True:
         clean()
         time.sleep(5)
+
 
 
 
